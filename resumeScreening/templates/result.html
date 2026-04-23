@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Result</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<style>
+    /* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    color: #1e293b;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+/* GLASS CARD */
+.card {
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: blur(20px);
+    padding: 40px;
+    border-radius: 18px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+}
+
+/* TITLE */
+h2 {
+    margin-bottom: 20px;
+}
+
+/* SCORE */
+.score-section {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.score {
+    font-size: 50px;
+    font-weight: 700;
+    color: #2563eb;
+}
+
+/* PROGRESS BAR */
+.progress {
+    margin-top: 15px;
+    height: 10px;
+    background: #e5e7eb;
+    border-radius: 10px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #2563eb, #3b82f6);
+    border-radius: 10px;
+    width: 0%;
+    transition: width 1s ease;
+}
+
+/* SKILLS */
+.section {
+    margin-top: 25px;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.tag {
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.match {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.missing {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* BUTTON */
+.btn {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 12px 20px;
+    background: #2563eb;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: #1d4ed8;
+}
+</style>
+
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <!-- Score -->
+        <div class="score-section">
+            <div class="score">{{ score }}%</div>
+            <p>ATS Match Score</p>
+
+            <div id="score-data" data-score="{{ score }}"></div>
+
+            <div class="progress">
+                <div class="progress-bar" id="bar"></div>
+            </div>
+        </div>
+
+        <!-- Matching Skills -->
+        <div class="section">
+            <h3>✅ Matching Skills</h3>
+            <div class="tags">
+                {% for skill in matched %}
+                    <span class="tag match">{{ skill }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Missing Skills -->
+        <div class="section">
+            <h3>❌ Missing Skills</h3>
+            <div class="tags">
+                {% for skill in missing %}
+                    <span class="tag missing">{{ skill }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <a href="/analyze-page" class="btn">⬅ Analyze Another</a>
+
+    </div>
+</div>
+
+<script src="result.js"></script>
+
+</body>
+</html>

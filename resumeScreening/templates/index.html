@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartScreen ATS - Premium UI</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+
+    body{
+      background: linear-gradient(120deg,#e0f2fe,#f8fafc,#e0e7ff);
+      color:#0f172a;
+    }
+
+    /* GLASS EFFECT */
+    .glass{
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,0.3);
+      box-shadow:0 8px 32px rgba(0,0,0,0.1);
+    }
+
+    /* NAVBAR */
+    .navbar{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:15px 8%;
+      position:sticky;top:0;z-index:1000;
+      margin:10px;
+    }
+
+    .logo{
+      font-size:24px;font-weight:700;color:#2563eb;
+    }
+
+    .nav ul{
+      display:flex;gap:30px;list-style:none;
+    }
+
+    .nav a{
+      text-decoration:none;color:#334155;font-weight:500;
+      position:relative;transition:0.3s;
+    }
+
+    .nav a::after{
+      content:"";position:absolute;width:0%;height:2px;
+      left:0;bottom:-5px;background:#2563eb;transition:0.3s;
+    }
+
+    .nav a:hover::after,
+    .nav a.active::after{
+      width:100%;
+    }
+
+    .nav a:hover{
+      color:#2563eb;
+    }
+
+    /* BUTTONS */
+    .auth-buttons{display:flex;gap:10px}
+
+    .btn{
+      background: linear-gradient(90deg,#3b82f6,#6366f1);
+      color:#fff;padding:10px 20px;border:none;border-radius:8px;
+      cursor:pointer;transition:0.3s;
+      text-decoration: none;
+    }
+
+    .btn:hover{
+      transform:scale(1.05);
+      background: linear-gradient(90deg,#6366f1,#3b82f6);
+    }
+
+    .btn-outline{
+      padding:10px 20px;border-radius:8px;border:1px solid #3b82f6;
+      background:transparent;color:#3b82f6;cursor:pointer;transition:0.3s;
+      text-decoration: none;
+    }
+
+    .btn-outline:hover{
+      background:#3b82f6;color:white;
+    }
+
+    /* HERO */
+    .hero{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:60px 8%;gap:40px;min-height:85vh;
+    }
+
+    .hero img{
+      width:100%;max-width:480px;border-radius:20px;
+      opacity:0;transform:translateX(-120px);
+      transition:all 1s ease;
+    }
+
+    .hero-text{
+      max-width:600px;
+      opacity:0;transform:translateX(120px);
+      transition:all 1s ease;
+    }
+
+    .hero-text h1{
+      font-size:38px;margin-bottom:20px;color:#1e293b;
+    }
+
+    .hero-text p{
+      font-size:16px;line-height:1.8;color:#475569;margin-bottom:30px;
+    }
+
+    /* DASHBOARD */
+    .dashboard{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:20px;padding:40px 8%;
+    }
+
+    .card{padding:25px;text-align:center}
+
+    .card h3{font-size:24px;color:#2563eb;margin-bottom:8px}
+    .card p{color:#475569;font-size:14px}
+
+    /* RESPONSIVE */
+    @media(max-width:768px){
+      .navbar{flex-direction:column;gap:15px}
+      .nav ul{flex-direction:column;align-items:center}
+      .auth-buttons{flex-direction:column;width:100%}
+      .hero{flex-direction:column;text-align:center}
+    }
+  html {
+      scroll-behavior: smooth;
+    }
+
+    </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header class="glass navbar">
+    <div class="logo">SmartScreen</div>
+
+    <nav class="nav">
+      <ul>
+        <li><a href="#" class="active">Home</a></li>
+        <li><a href="#dashboard">Dashboard</a></li>
+        <li><a href="{{ url_for('analyze_page') }}">Upload Resume</a></li>
+      </ul>            
+    </nav>
+
+    <div class="auth-buttons">
+      {% if session['user'] %}
+    <span>Welcome, {{ session['user'] }}</span>
+    <a href="{{ url_for('logout') }}">Logout</a>
+      {% else %}
+      <a href="{{ url_for('login_page') }}"  <button class="btn-outline"> Login</button></a>
+      <a href="{{ url_for('signup_page') }}" <button class="btn"> Sign-up</button></a> 
+      {% endif %}
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <img src="https://images.unsplash.com/photo-1551434678-e076c223a692" alt="AI Hiring">
+
+    <div class="hero-text">
+      <h1>Smart Hiring Starts Here</h1>
+      <p>
+        Welcome to SmartScreen, your intelligent hiring companion.
+        Our platform streamlines recruitment by automatically analyzing resumes with speed and accuracy.
+        Discover top talent faster through AI-powaered screening and customizable filters.
+        Save time, reduce bias, and make smarter hiring decisions effortlessly.
+        Whether you’re a startup or enterprise, we help you build winning teams with confidence
+      </p>
+
+    <form action="/analyze" method="POST" enctype="multipart/form-data">
+
+    <div class="input-section">
+
+        <!-- File Upload -->
+        <div class="upload-box" onclick="document.getElementById('fileInput').click()">
+            <p>Drag & Drop Resume</p>
+            <input type="file" name="resume" id="fileInput" required>
+        </div>
+
+        <!-- Job Description -->
+        <div class="jd-box">
+            <textarea name="job_desc" placeholder="Paste Job Description..." required></textarea>
+        </div>
+
+    </div>
+
+    <button type="submit" class="btn">Analyze Resume</button>
+
+</form>
+
+
+    </div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section id="dashboard" class="dashboard">
+    <div class="card glass">
+      <h3>95%</h3>
+      <p>Accuracy</p>
+    </div>
+    <div class="card glass">
+      <h3>10K+</h3>
+      <p>Resumes Screened</p>
+    </div>
+    <div class="card glass">
+      <h3>Fast</h3>
+      <p>Instant Analysis</p>
+    </div>
+    <div class="card glass">
+      <h3>AI</h3>
+      <p>Smart Filtering</p>
+    </div>
+  </section>
+
+  <script>
+    window.addEventListener('load',()=>{
+      const img=document.querySelector('.hero img');
+      const text=document.querySelector('.hero-text');
+
+      setTimeout(()=>{
+        img.style.opacity='1';
+        img.style.transform='translateX(0)';
+      },300);
+
+      setTimeout(()=>{
+        text.style.opacity='1';
+        text.style.transform='translateX(0)';
+      },600);
+    });
+  </script>
+
+</body>
+</html>
